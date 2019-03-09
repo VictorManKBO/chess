@@ -1,0 +1,12 @@
+ARM
+Debug
+Release
+TestResult
+x64
+*.bmp
+*.txt
+*.*.suo
+*.exe
+*.sdf
+*.user
+*.opensdf
