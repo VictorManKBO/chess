@@ -6,7 +6,8 @@
 #include "myMethod.h"
 
 namespace stp{
-	static const int stepHorse[7][2] = {
+	static const int stepHorse[7][2] = 
+	{
 		{2,1},
 		{-2,1},
 		{-2,-1},
@@ -19,7 +20,8 @@ namespace stp{
 	static const int iHorse = 7;
 	static const int jHorse = 2;
 
-	static const int stepRook[4][2]={
+	static const int stepRook[4][2]=
+	{
 		{1,0},
 		{0,1},
 		{-1,0},
@@ -28,7 +30,8 @@ namespace stp{
 	static const int iRook = 4;
 	static const int jRook = 2;
 
-	static const int stepOficer[4][2]={
+	static const int stepOficer[4][2]=
+	{
 		{1,1},
 		{-1,1},
 		{1,-1},
@@ -37,7 +40,8 @@ namespace stp{
 	static const int iOficer = 4;
 	static const int jOficer = 2;
 
-	static const int stepKing[8][2]={
+	static const int stepKing[8][2]=
+	{
 		//״אד כאהüט	+ ״אד מפטצונא
 		{1,0},
 		{0,1},

@@ -12,11 +12,11 @@
 namespace myUtil{
 
 	//Загрузка ".Х" файла и извлечение из него информации о материале и текстурах
-	VOID LoadXfile( char* nameXfile, IDirect3DDevice9* device, ID3DXMesh **outMesh, 
-		std::vector<D3DMATERIAL9>* outMtrl, std::vector<IDirect3DTexture9*>* outTextures );
+	VOID LoadXfile(char* nameXfile, IDirect3DDevice9* device, ID3DXMesh **outMesh, 
+		std::vector<D3DMATERIAL9>* outMtrl, std::vector<IDirect3DTexture9*>* outTextures);
 	//Прорисовка сетки, наложение материала и текстур
-	VOID DrawObject( IDirect3DDevice9* device, ID3DXMesh **mesh, 
-		std::vector<D3DMATERIAL9>* matrl, std::vector<IDirect3DTexture9*>* textures, D3DXVECTOR3 * pos, float angleRotate );
+	VOID DrawObject(IDirect3DDevice9* device, ID3DXMesh **mesh, 
+		std::vector<D3DMATERIAL9>* matrl, std::vector<IDirect3DTexture9*>* textures, D3DXVECTOR3 * pos, float angleRotate);
 	//Считать имена из афйла
 	char* ReadNameFileX();
 	//Распечатать цвет
@@ -25,16 +25,16 @@ namespace myUtil{
 	
 }
 
-enum { LOW = 1, MEDIUM = 5, FAST = 10 };
+enum {LOW = 1, MEDIUM = 5, FAST = 10};
 struct SpeedMouse{	
 	SpeedMouse();
-	SpeedMouse( int speed ){
+	SpeedMouse(int speed){
 		_speed = speed;
 	}
 	int _speed;
 };
 
-enum FIGURE { LEFT_ROOK = 0, 
+enum FIGURE {LEFT_ROOK = 0, 
 			LEFT_HORSE = 1, 
 			LEFT_OFICER = 2, 
 			QUEEN = 3, 
@@ -45,7 +45,7 @@ enum FIGURE { LEFT_ROOK = 0,
 			PAWN = 8 , 
 			EMPTY = 9 }; 
 
-enum { PLAYER1 = 0, PLAYER2 = 7 };
+enum {PLAYER1 = 0, PLAYER2 = 7};
 
 class GameField{
 private:
@@ -80,23 +80,23 @@ public:
 	INT GameField::GetPlayer( int i, int j );
 	VOID GameField::SetFigureInPos( FIGURE figure, int player, int x, int y );
 	VOID GameField::Delete();
-	D3DXVECTOR3 GameField::GetPosOfField( int i, int j );
+	D3DXVECTOR3 GameField::GetPosOfField(int i, int j);
 };
 
 class ARROW{
 public:
 	ARROW();
 	~ARROW();
-	VOID ARROW::Init( GameField *gf, IDirect3DDevice9 *device );
+	VOID ARROW::Init(GameField *gf, IDirect3DDevice9 *device);
 	VOID ARROW::Show();
 	VOID ARROW::Hide();
 	VOID ARROW::Draw( IDirect3DDevice9 *device );
-	VOID ARROW::Move( GameField *gf, int x, int y );
+	VOID ARROW::Move( GameField *gf, int x, int y);
 	VOID ARROW::ChangeColor();
 	VOID ARROW::GetPos( int *x, int *y );
 	VOID ARROW::Delete();
 private:
-	enum { GREEN_MTRL = 0 , RED_MTRL = 1 };
+	enum {GREEN_MTRL = 0 , RED_MTRL = 1 };
 	D3DXVECTOR3 _pos;
 	int i, j;
 	BOOL show;

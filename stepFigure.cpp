@@ -45,7 +45,7 @@ BOOL STEP::AllOk( ){
 	return _ok;
 }
 
-BOOL STEP::Go( FIGURE f ){
+BOOL STEP::Go( FIGURE f){
 	bool flag = false ;
 
 	switch ( f )
@@ -137,7 +137,10 @@ BOOL STEP::Rook(){
 
 BOOL STEP::Pawn(){
 	bool flag = false;
-	
+	/*if( ( _currentPos.x+1 == _nextPos.x ) || ( _currentPos.x-1 == _nextPos.x ) //Съедание
+		|| ( _currentPos.y+1 == _nextPos.y ) || ( _currentPos.y-1 == _nextPos.y ) )
+		*/
+
 	switch ( _player )
 	{
 	case PLAYER1:

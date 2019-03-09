@@ -141,7 +141,7 @@ Material PDX02_-_Default_02_-_DefaultSub0 {
  0.000000;0.000000;0.000000;;
 
  TextureFilename {
-  "doska.bmp";
+  "models/doska.bmp";
  }
 }
 
@@ -152,7 +152,7 @@ Material PDX02_-_Default_Material__1Sub1 {
  0.000000;0.000000;0.000000;;
 
  TextureFilename {
-  "doska2.bmp";
+  "models/doska2.bmp";
  }
 }
 

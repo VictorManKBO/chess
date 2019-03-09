@@ -6,8 +6,9 @@
 #include "d3dUtility.h"
 
 
-VOID myUtil::LoadXfile( char* nameXfile, IDirect3DDevice9* device, ID3DXMesh** outMesh, 
-		std::vector<D3DMATERIAL9>* outMtrl, std::vector<IDirect3DTexture9*>* outTextures ){
+VOID myUtil::LoadXfile(char* nameXfile, IDirect3DDevice9* device, ID3DXMesh** outMesh, 
+		std::vector<D3DMATERIAL9>* outMtrl, std::vector<IDirect3DTexture9*>* outTextures)
+{
 	//Загрузка сетки
 	
 	HRESULT hr = NULL;
@@ -15,21 +16,23 @@ VOID myUtil::LoadXfile( char* nameXfile, IDirect3DDevice9* device, ID3DXMesh** o
 	ID3DXBuffer* mtrljBuffer = NULL;
 	DWORD NumMtrls = NULL;
 
-	hr = D3DXLoadMeshFromX( nameXfile, D3DXMESH_MANAGED, device, &adjBuffer, &mtrljBuffer, NULL, &NumMtrls, &*outMesh ); 
-	if( FAILED(hr) )	{
-		::MessageBox( 0, "D3DMeshFromFileX() - Failed", 0, 0 );
+	hr = D3DXLoadMeshFromX(nameXfile, D3DXMESH_MANAGED, device, &adjBuffer, &mtrljBuffer, NULL, &NumMtrls, &*outMesh); 
+	if( FAILED(hr) )
+	{
+		::MessageBox(0, "D3DMeshFromFileX() - Failed", 0, 0);
 	}
 
 	//Извлечение материала и загрузка текстур
 	if (mtrljBuffer !=NULL && NumMtrls != NULL){
-		D3DXMATERIAL * mtrls = ( D3DXMATERIAL *)mtrljBuffer->GetBufferPointer();
-		for( int i = 0; i < NumMtrls; i++ ){
+		D3DXMATERIAL * mtrls = (D3DXMATERIAL*)mtrljBuffer->GetBufferPointer();
+		for(int i=0; i < NumMtrls; i++){
 			mtrls[i].MatD3D.Ambient = mtrls[i].MatD3D.Diffuse;
 			//Сохранение материала
-			if ( outMtrl != NULL )
+			if (outMtrl != NULL)
 				outMtrl->push_back( mtrls[i].MatD3D );
 			//Проверяем, связана ли с i-тым материалом текстура
-			if( mtrls[i].pTextureFilename !=NULL ){
+			if( mtrls[i].pTextureFilename !=NULL )
+			{
 				IDirect3DTexture9* tex = NULL;
 				D3DXCreateTextureFromFile( device, mtrls[i].pTextureFilename, &tex );
 				//Соxраняем текстуру, если пользователь разрешил
@@ -42,12 +45,13 @@ VOID myUtil::LoadXfile( char* nameXfile, IDirect3DDevice9* device, ID3DXMesh** o
 		}
 	}
 	//Уничтожаем неиспользуемые переменные
-	d3d::Release<ID3DXBuffer*> ( mtrljBuffer );
-	d3d::Release<ID3DXBuffer*> ( adjBuffer );
+	d3d::Release<ID3DXBuffer*> (mtrljBuffer);
+	d3d::Release<ID3DXBuffer*> (adjBuffer);
 }
 
-VOID myUtil::DrawObject( IDirect3DDevice9* device, ID3DXMesh **mesh, 
-		std::vector<D3DMATERIAL9>* mtrl, std::vector<IDirect3DTexture9*>* textures, D3DXVECTOR3 * pos , float angleRotate ){
+VOID myUtil::DrawObject(IDirect3DDevice9* device, ID3DXMesh **mesh, 
+		std::vector<D3DMATERIAL9>* mtrl, std::vector<IDirect3DTexture9*>* textures, D3DXVECTOR3 * pos , float angleRotate)
+{
 	//Установка позиции, в которой будет нарисован объект
 	D3DXMATRIX w;
 	D3DXMatrixTranslation( &w,
@@ -62,11 +66,12 @@ VOID myUtil::DrawObject( IDirect3DDevice9* device, ID3DXMesh **mesh,
 				device->SetMaterial( &mtrl->at(k) );
 				if ( textures != NULL )
 					device->SetTexture( NULL, textures->at(k) );
-				( *mesh )->DrawSubset( k );
+				(*mesh)->DrawSubset( k );
 			}
 }
 
-char* myUtil::ReadNameFileX(){
+char* myUtil::ReadNameFileX()
+{
 	return NULL; 
 }
 
@@ -91,19 +96,21 @@ void myUtil::PrintColor( float *a, float *r, float *g, float *b, std::ofstream *
 }
 
 
-GameField::GameField(){
+GameField::GameField()
+{
 
 }
 
-GameField::~GameField(){
+GameField::~GameField()
+{
 
 }
 
 VOID GameField::InitField(){
 	int posZ = - _MAXPOSZ;
-	for( int i = 0; i < _COUNT; i++ ){
+	for(int i = 0; i < _COUNT; i++){
 		int posX = - _MAXPOSX;
-		for( int j = 0; j < _COUNT; j++ ){
+		for(int j = 0; j < _COUNT; j++){
 			field[i][j]._inpos = EMPTY;
 			field[i][j]._player = EMPTY;			
 			
@@ -117,11 +124,11 @@ VOID GameField::InitField(){
 	}
 		
 	//расстановка фигур первого игрока
-	for( int j = 0; j < _COUNT; j++ ){ field[0][j]._inpos = FIGURE( j ); field[0][j]._player = PLAYER1; }
-	for( int j = 0; j < _COUNT; j++ ){ field[1][j]._inpos = FIGURE( PAWN ); field[1][j]._player = PLAYER1; }
+	for(int j = 0; j < _COUNT; j++){ field[0][j]._inpos = FIGURE( j ); field[0][j]._player = PLAYER1; }
+	for(int j = 0; j < _COUNT; j++){ field[1][j]._inpos = FIGURE( PAWN ); field[1][j]._player = PLAYER1; }
 	//расстановка фигур второго игрока
-	for( int j = 0; j < _COUNT; j++ ){ field[7][j]._inpos = FIGURE( j );  field[7][j]._player = PLAYER2; }
-	for( int j = 0; j < _COUNT; j++ ){ field[6][j]._inpos = FIGURE( PAWN ); field[6][j]._player = PLAYER2; }
+	for(int j = 0; j < _COUNT; j++){ field[7][j]._inpos = FIGURE( j );  field[7][j]._player = PLAYER2; }
+	for(int j = 0; j < _COUNT; j++){ field[6][j]._inpos = FIGURE( PAWN ); field[6][j]._player = PLAYER2; }
 }
 
 
@@ -129,7 +136,7 @@ VOID GameField::DrawFigureOnDesk( IDirect3DDevice9 * device ){
 	for( int i = 0; i < _COUNT; i++ )
 		for( int j = 0; j < _COUNT; j++ ){
 			float  angleRot = 0;
-			std::vector<D3DMATERIAL9> figureMtrl( figure[ field[i][j]._inpos ].mtrl.size() );
+			std::vector<D3DMATERIAL9> figureMtrl(figure[ field[i][j]._inpos ].mtrl.size());
 			if ( field[i][j]._player == PLAYER1 ){ 
 				angleRot = 0;
 				for( int k = 0; k < figureMtrl.size(); k++ )
@@ -141,23 +148,24 @@ VOID GameField::DrawFigureOnDesk( IDirect3DDevice9 * device ){
 					figureMtrl[k] = d3d::BLACK_MTRL;
 			}
 			
-			myUtil::DrawObject( device, &figure[ field[i][j]._inpos ].mesh, 
+			myUtil::DrawObject(device, &figure[ field[i][j]._inpos ].mesh, 
 				&figureMtrl, &figure[ field[i][j]._inpos ].textures, &field[i][j]._pos, angleRot );
 		}
 		
 }
 
-VOID GameField::LoadFigure( IDirect3DDevice9 * device ){
+VOID GameField::LoadFigure( IDirect3DDevice9 * device )
+{
 	
-		myUtil::LoadXfile( "king.x", device, &figure[ KING ].mesh, &figure[ KING ].mtrl, &figure[ KING ].textures );
-		myUtil::LoadXfile( "queen.x", device, &figure[ QUEEN ].mesh, &figure[ QUEEN ].mtrl, &figure[ QUEEN ].textures );
-		myUtil::LoadXfile( "rook.x", device, &figure[ LEFT_ROOK ].mesh, &figure[ LEFT_ROOK ].mtrl, &figure[ LEFT_ROOK ].textures );
-		myUtil::LoadXfile( "rook.x", device, &figure[ RIGHT_ROOK ].mesh, &figure[ RIGHT_ROOK ].mtrl, &figure[ RIGHT_ROOK ].textures );
-		myUtil::LoadXfile( "oficer.x", device, &figure[ LEFT_OFICER ].mesh, &figure[ LEFT_OFICER ].mtrl, &figure[ LEFT_OFICER ].textures );
-		myUtil::LoadXfile( "oficer.x", device, &figure[ RIGHT_OFICER ].mesh, &figure[ RIGHT_OFICER ].mtrl, &figure[ RIGHT_OFICER ].textures );
-		myUtil::LoadXfile( "horse.x", device, &figure[ LEFT_HORSE ].mesh, &figure[ LEFT_HORSE ].mtrl, &figure[ LEFT_HORSE ].textures );
-		myUtil::LoadXfile( "horse.x", device, &figure[ RIGHT_HORSE ].mesh, &figure[ RIGHT_HORSE ].mtrl, &figure[ RIGHT_HORSE ].textures );
-		myUtil::LoadXfile( "pawn.x", device, &figure[ PAWN ].mesh, &figure[ PAWN ].mtrl, &figure[ PAWN ].textures );
+		myUtil::LoadXfile("models/king.x", device, &figure[ KING ].mesh, &figure[ KING ].mtrl, &figure[ KING ].textures);
+		myUtil::LoadXfile("models/queen.x", device, &figure[ QUEEN ].mesh, &figure[ QUEEN ].mtrl, &figure[ QUEEN ].textures);
+		myUtil::LoadXfile("models/rook.x", device, &figure[ LEFT_ROOK ].mesh, &figure[ LEFT_ROOK ].mtrl, &figure[ LEFT_ROOK ].textures);
+		myUtil::LoadXfile("models/rook.x", device, &figure[ RIGHT_ROOK ].mesh, &figure[ RIGHT_ROOK ].mtrl, &figure[ RIGHT_ROOK ].textures);
+		myUtil::LoadXfile("models/oficer.x", device, &figure[ LEFT_OFICER ].mesh, &figure[ LEFT_OFICER ].mtrl, &figure[ LEFT_OFICER ].textures);
+		myUtil::LoadXfile("models/oficer.x", device, &figure[ RIGHT_OFICER ].mesh, &figure[ RIGHT_OFICER ].mtrl, &figure[ RIGHT_OFICER ].textures);
+		myUtil::LoadXfile("models/horse.x", device, &figure[ LEFT_HORSE ].mesh, &figure[ LEFT_HORSE ].mtrl, &figure[ LEFT_HORSE ].textures);
+		myUtil::LoadXfile("models/horse.x", device, &figure[ RIGHT_HORSE ].mesh, &figure[ RIGHT_HORSE ].mtrl, &figure[ RIGHT_HORSE ].textures);
+		myUtil::LoadXfile("models/pawn.x", device, &figure[ PAWN ].mesh, &figure[ PAWN ].mtrl, &figure[ PAWN ].textures);
 		
 }
 
@@ -184,7 +192,7 @@ VOID GameField::Delete()
 	}
 }
 
-D3DXVECTOR3 GameField::GetPosOfField( int i, int j ){
+D3DXVECTOR3 GameField::GetPosOfField(int i, int j){
 	return field[i][j]._pos;
 }
 
@@ -195,8 +203,8 @@ ARROW::ARROW(){
 ARROW::~ARROW(){
 
 }
-VOID ARROW::Init( GameField *gf, IDirect3DDevice9 *device ){
-	myUtil::LoadXfile("arrow.x", device, &mesh, NULL, NULL);
+VOID ARROW::Init(GameField *gf, IDirect3DDevice9 *device ){
+	myUtil::LoadXfile("models/arrow.x", device, &mesh, NULL, NULL);
 	mtrl.push_back( d3d::GREEN_MTRL );
 	i = PLAYER1;
 	j = KING;
@@ -216,7 +224,7 @@ VOID ARROW::Draw( IDirect3DDevice9 *device ){
 	if (show) myUtil::DrawObject( device, &mesh, &mtrl, NULL, &_pos, 0.0f ) ;
 }
 
-VOID ARROW::Move( GameField *gf, int x, int y ){
+VOID ARROW::Move( GameField *gf, int x, int y){
 	if(  ( j + x < 8 ) && ( j + x >= 0 ) &&
 		( i + y < 8 )&&( i + y >= 0 ) )
 	{_pos = gf->GetPosOfField( i+y, j+x );_pos.y = 120; j += x; i+= y;}
@@ -224,14 +232,14 @@ VOID ARROW::Move( GameField *gf, int x, int y ){
 
 VOID ARROW::ChangeColor(){
 	
-	if( _mtrl == GREEN_MTRL ){
+	if( _mtrl == GREEN_MTRL){
 		for( int i = 0; i < mtrl.size(); i++ ){
 			mtrl[ i ] = d3d::RED_MTRL;
 		}
 		_mtrl = RED_MTRL;
 	}
 	else
-		if( _mtrl == RED_MTRL ){
+		if( _mtrl == RED_MTRL){
 			for( int i = 0; i < mtrl.size(); i++ ){
 				mtrl[ i ] = d3d::GREEN_MTRL;
 			}

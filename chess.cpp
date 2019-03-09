@@ -27,6 +27,7 @@
 // Globals
 //
 
+static char PATH[] = "models/";
 IDirect3DDevice9* Device = NULL; 
 
 const int Width  = 1366;
@@ -169,8 +170,8 @@ bool Setup()
 	Play.Init();
 
 	//Загрузка X - объекта
-	myUtil::LoadXfile( "desk.x", Device, &desk , &deskMtrl, &deskTextures );
-	myUtil::LoadXfile( "arrow.x", Device, &king , &kingMtrl, &kingTextures );
+	myUtil::LoadXfile( "models/desk.x", Device, &desk , &deskMtrl, &deskTextures );
+	myUtil::LoadXfile( "models/arrow.x", Device, &king , &kingMtrl, &kingTextures );
 	Field.LoadFigure( Device );
  	//
 	//
@@ -213,6 +214,12 @@ bool Setup()
 	//
 
 	D3DXVECTOR3 pos( 0.0f, 250.0f, -500.0f );
+	/*D3DXVECTOR3 target( 0.0f, 0.0f, 0.0f );
+	D3DXVECTOR3 up( 0.0f, 1.0f, 0.0f );
+
+	D3DXMATRIX V;
+	D3DXMatrixLookAtLH( &V, &pos, &target, &up );
+	Device->SetTransform( D3DTS_VIEW, &V );*/
 	
 	TheCamera.setPosition( &pos );
 	TheCamera.pitch( 30 * D3DX_PI / 180 );
@@ -285,6 +292,7 @@ bool Display( float timeDelta )
 		}
 
 
+
 		if( ::GetAsyncKeyState( 'R' ) & 0x8000f )
 			TheCamera.fly(100.0f * timeDelta);
 
@@ -292,25 +300,25 @@ bool Display( float timeDelta )
 			TheCamera.fly(-100.0f * timeDelta);
 
 		if( ::GetAsyncKeyState( VK_UP ) & 0x8000f ){
-			
+			//TheCamera.pitch(1.0f * timeDelta);
 			Arrow.Move( &Field, 0 , 1 );
 			WaitUnpressKey( VK_UP );
 		}
 
 		if( ::GetAsyncKeyState( VK_DOWN ) & 0x8000f ){
-			
+			//TheCamera.pitch(-1.0f * timeDelta);
 			Arrow.Move( &Field, 0 , -1 );
 			WaitUnpressKey( VK_DOWN );
 		}
 
 		if( ::GetAsyncKeyState( VK_LEFT ) & 0x8000f ){
-			
+			//TheCamera.yaw(-1.0f * timeDelta);
 			Arrow.Move( &Field, -1 , 0 );
 			WaitUnpressKey( VK_LEFT );
 		}
 			
 		if( ::GetAsyncKeyState( VK_RIGHT ) & 0x8000f ){
-			
+			//TheCamera.yaw(1.0f * timeDelta);
 			Arrow.Move( &Field, 1 , 0 );
 			WaitUnpressKey( VK_RIGHT );
 		}
@@ -323,13 +331,20 @@ bool Display( float timeDelta )
 
 		if( ::GetAsyncKeyState( VK_RBUTTON ) & 0x8000f ){
 			GetCursorPos( &mousePos );
-			
+			/*POINT centr;
+			centr.x = 1366 / 2;
+			centr.y = 768 / 2;
+			ShowCursor( false );
+			SetCursorPos( centr.x, centr.y );*/
+			/*int dx = -( centr.x - mousePos.x) ;
+			int dy = -( centr.y - mousePos.y );*/
 			int dx = ( mousePos.x - oldMousePos.x) ;
 			int dy = ( mousePos.y - oldMousePos.y );
-			
+			//float a = 1.0f;
+			//if ( dy != 0 )	a = atan( dx/dy );
 			TheCamera.yaw( sign(dx) * speedMouse._speed * timeDelta );
 			TheCamera.pitch( sign(dy) * speedMouse._speed * timeDelta );
-		
+		/*	ShowCursor( true ); */
 			oldMousePos=mousePos;
 		}
 		if( ::GetAsyncKeyState( VK_LBUTTON ) & 0x8000f ){
@@ -384,19 +399,22 @@ bool Display( float timeDelta )
 			
 		}
 
+
 		// Update the view matrix representing the cameras 
-     
+        // new position/orientation.11
 		
 		D3DXVECTOR3 pos;
 		if ( player != Play.GetPlayer() ) { 
 			if( player == PLAYER1 ){
 				pos = D3DXVECTOR3 ( 0.0f, 250.0f, 500.0f );
-				
+				//TheCamera.setPosition( &pos );
 			}
 			else {
 				pos = D3DXVECTOR3 ( 0.0f, 250.0f, -500.0f );
-				
+				//TheCamera.setPosition( &pos );
 			}
+
+			
 	
 			player = Play.GetPlayer();
 		}
@@ -407,6 +425,33 @@ bool Display( float timeDelta )
 		TheCamera.getViewMatrix(&V);
 		Device->SetTransform(D3DTS_VIEW, &V);
 
+
+
+		//
+		// Update: Update Teapot.
+		//
+			
+		/*static float r     = 0.0f;
+		static float v     = 1.0f;
+		static float angle = 0.0f;
+
+		D3DXMatrixTranslation(&World, cosf(angle) * r, sinf(angle) * r, 10.0f);*/
+
+		// transfrom the bounding sphere to match the teapots position in the
+		// world.
+		//BSphere._center = D3DXVECTOR3(cosf(angle)*r, sinf(angle)*r, 10.0f);
+
+		//r += v * timeDelta;
+
+		//if( r >= 8.0f )
+		//	v = -v; // reverse direction
+
+		//if( r <= 0.0f )
+		//	v = -v; // reverse direction
+
+		//angle += 1.0f * D3DX_PI * timeDelta;
+		//if( angle >= D3DX_PI * 2.0f )
+		//	angle = 0.0f;
 
 		//
 		// Render
@@ -462,6 +507,7 @@ bool Display( float timeDelta )
 				Log->Render( 0xff004400 );
 	
 		
+
 		//Установка мировой матрицы на координаты сферы короля
 		D3DXMatrixTranslation(&W, BSphere._center.x, BSphere._center.y, BSphere._center.z );
 		Device->SetTransform(D3DTS_WORLD, &W );		
@@ -500,7 +546,25 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			::DestroyWindow(hwnd);
 
 		break;
-	
+	//case WM_LBUTTONDOWN:
+
+	//	// compute the ray in view space given the clicked screen point
+	//	ray = CalcPickingRay(LOWORD(lParam), HIWORD(lParam));
+
+	//	// transform the ray to world space
+	//	D3DXMATRIX view;
+	//	Device->GetTransform(D3DTS_VIEW, &view);
+
+	//	D3DXMATRIX viewInverse;
+	//	D3DXMatrixInverse(&viewInverse,	0, &view);
+
+	//	TransformRay(&ray, &viewInverse);
+
+	//	// test for a hit
+	//	if( RaySphereIntTest(&ray, &BSphere) )
+	//		::MessageBox(0, "Hit!", "HIT", 0);
+
+	//	break;
 	}
 	return ::DefWindowProc(hwnd, msg, wParam, lParam);
 }
